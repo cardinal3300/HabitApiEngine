@@ -5,7 +5,6 @@ from django.db import models
 
 class Habit(models.Model):
     """Модель привычки."""
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -101,14 +100,14 @@ class Habit(models.Model):
                 'У приятной привычки не может быть вознаграждения или связанной привычки.'
             )
 
-        def save(self, *args, **kwargs):
-            self.full_clean()                           # защита при создании через код / shell
-            return super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
-        def __str__(sels):
-            return f'{self.action - {self.time} ({self.user})}'
+    def __str__(self):
+        return f'{self.action} - {self.time} ({self.user})'
 
-        class Meta:
-            verbose_name = 'Привычка'
-            verbose_name_plural = 'Привычки'
-            ordering = ['-created_at']
+    class Meta:
+        verbose_name = 'Привычка'
+        verbose_name_plural = 'Привычки'
+        ordering = ['-created_at']

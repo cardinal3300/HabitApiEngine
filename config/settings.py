@@ -72,6 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -155,3 +156,5 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_TIMEZONE = TIME_ZONE
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
