@@ -11,6 +11,5 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.autodiscover_tasks()
 
-app.conf.timezone = "UTC"
-
 app.conf.enable_utc = True
+app.conf.timezone = "UTC"

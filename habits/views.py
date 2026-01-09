@@ -1,9 +1,10 @@
 from rest_framework.generics import ListAPIView
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+
 from habits.models import Habit
-from habits.serializers import HabitSerializer
 from habits.permissions import IsOwner, IsPublicReadOnly
+from habits.serializers import HabitSerializer
 from paginators import MyPaginator
 
 

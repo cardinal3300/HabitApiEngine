@@ -39,7 +39,6 @@ INSTALLED_APPS = [
 
     'users',
     'habits',
-    'telegram_bot',
 ]
 
 MIDDLEWARE = [
@@ -147,14 +146,15 @@ CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
-CELERY_BROKER_URL = REDIS_URL
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_RESULT_SERIALIZER = "json"
+
 CELERY_TIMEZONE = TIME_ZONE
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
