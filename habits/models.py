@@ -35,8 +35,12 @@ class Habit(models.Model):
         verbose_name="Время на выполнение (в секундах)"
     )
     is_public = models.BooleanField(default=False, verbose_name="Признак публичности")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления")
+    created_at = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True, verbose_name="Время создания"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, null=True, blank=True, verbose_name="Время обновления"
+    )
 
     def clean(self):
         """Валидация бизнес-логики."""
@@ -61,7 +65,7 @@ class Habit(models.Model):
         # 5. У приятной привычки не может быть reward и related_habit
         if self.is_pleasant and (self.reward or self.related_habit):
             raise ValidationError(
-                "У приятной привычки не может быть вместе и вознаграждения и связанной привычки."
+                "У приятной привычки не может быть вместе и вознаграждения или связанной привычки."
             )
 
     def save(self, *args, **kwargs):

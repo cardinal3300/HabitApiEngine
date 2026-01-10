@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from habits.models import Habit
-from habits.servises import check_habits_is_periodicity
+from habits.services import check_habits_is_periodicity
 from users.models import User
 
 bot = telebot.TeleBot(settings.TELEGRAM_BOT_TOKEN)
@@ -36,10 +36,11 @@ def send_habit_reminders():
             bot.send_message(
                 user.telegram_chat_id,
                 (
-                    f"⏰ Напоминание!\n"
-                    f"Привычка: {habit.action}\n"
-                    f"Место: {habit.place}\n"
-                    f"Время: {habit.time.strftime('%H:%M')}\n"
-                    f"Время на выполнение: {habit.execution_time} секунд"
+                    f"⏰ Напоминание! {habit.action}\n"
+                    f"📍 Место: {habit.place}\n"
+                    f"🕗 Время: {habit.time.strftime('%H:%M')}\n"
+                    f"Время на выполнение: {habit.execution_time} секунд\n"
+                    f"🎁 Вознаграждение: {habit.reward}\n"
+                    f"😊 Приятная привычка {habit.related_habit}"
                 ),
             )

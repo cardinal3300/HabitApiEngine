@@ -1,0 +1,10 @@
+[run]
+source =
+    habits
+
+omit =
+    */migrations/*
+    */admin.py
+    */apps.py
+    */__init__.py
+    config/*
