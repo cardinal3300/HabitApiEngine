@@ -1,0 +1,12 @@
+**
+!config
+!courses
+!lessons
+!nginx
+!users
+!manage.py
+!paginators.py
+!Dockerfile
+!.flake8
+!requirements.txt
+!docker-compose.yml
