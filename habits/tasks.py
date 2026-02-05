@@ -13,6 +13,7 @@ bot = telebot.TeleBot(settings.TELEGRAM_BOT_TOKEN)
 @shared_task
 def send_habit_reminders():
     """Отправка напоминания пользователю телеграм-боту о его привычках."""
+
     now = timezone.localtime()
     current_hour = now.hour
     current_minute = now.minute

@@ -1,5 +1,5 @@
 from datetime import time
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -12,15 +12,14 @@ User = get_user_model()
 
 
 class SendHabitRemindersTaskTestCase(HabitBaseTestCase):
-
     def setUp(self):
         super().setUp()
 
     @patch("habits.tasks.bot.send_message")
     def test_reminder_sent_when_conditions_match(self, mock_send):
         """Напоминание отправляется при выполнении условий."""
-        now = timezone.localtime()
 
+        now = timezone.localtime()
         Habit.objects.create(
             user=self.user,
             action="Выпить воды",
@@ -31,7 +30,6 @@ class SendHabitRemindersTaskTestCase(HabitBaseTestCase):
         )
 
         send_habit_reminders()
-
         self.assertEqual(mock_send.call_count, 1)
 
     @patch("habits.tasks.bot.send_message")
@@ -48,15 +46,14 @@ class SendHabitRemindersTaskTestCase(HabitBaseTestCase):
         )
 
         send_habit_reminders()
-
         mock_send.assert_not_called()
 
     @patch("habits.tasks.bot.send_message")
     @patch("habits.tasks.check_habits_is_periodicity", return_value=False)
     def test_reminder_not_sent_if_periodicity_false(self, mock_periodicity, mock_send):
         """Если периодичность не задана, напоминание не отправляется."""
-        now = timezone.localtime()
 
+        now = timezone.localtime()
         Habit.objects.create(
             user=self.user,
             place="Дом",
@@ -69,5 +66,4 @@ class SendHabitRemindersTaskTestCase(HabitBaseTestCase):
         )
 
         send_habit_reminders()
-
         mock_send.assert_not_called()
