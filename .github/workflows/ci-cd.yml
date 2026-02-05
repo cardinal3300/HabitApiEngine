@@ -104,10 +104,12 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'      
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}:latest
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'    
+            cd /opt/habitapiengine
+            IMAGE_TAG=${GITHUB_SHA}
+            docker compose pull ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${IMAGE_TAG}
             docker compose up -d
-            docker exec -T backend python manage.py migrate --noinput
-            docker exec -T backend python manage.py collectstatic --noinput            
+            docker compose exec -T backend python manage.py migrate --noinput
+            docker compose exec -T backend python manage.py collectstatic --noinput            
             docker image prune -f
           EOF
