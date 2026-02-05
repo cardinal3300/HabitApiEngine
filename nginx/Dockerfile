@@ -1,7 +1,6 @@
 FROM nginx:latest
 
-RUN mkdir -p /app/static \
-    && rm -f /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/conf.d/default.conf
 
 COPY nginx.conf /etc/nginx/nginx.conf
 

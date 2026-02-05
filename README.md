@@ -60,6 +60,9 @@ HabitApiEngine/
 - **drf-yasg (Swagger)**
 - **APITestCase**
 - **CORS**
+- **Docker**
+- **Docker Compose**
+- **CI/CD**
 
 ---
 
@@ -129,16 +132,6 @@ HabitApiEngine/
 
 ---
 
-## 📘 Документация API
-
-Swagger/Redoc доступен по адресу:
-
-https://localhost/api/swagger/
-
-https://localhost/api/redoc/
-
----
-
 ## ⚙️ Бизнес-ограничения и валидации
 
 - Нельзя указывать одновременно вознаграждение и связанную привычку
@@ -149,13 +142,126 @@ https://localhost/api/redoc/
 
 ---
 
-## 🌐 CORS
+## 🚀 Deployment & CI/CD
+
+### 📦 Требования к серверу
+
+Удалённый сервер должен иметь:
+
+- Ubuntu 20.04+
+
+- Docker
+
+- Docker Compose
+
+- Открытый порт 80/443
+
+- Открытый порт 22
+
+---
+
+## 🌐 Локальный запуск
+
+```bash
+    git clone git@github.com:cardinal3300/HabitApiEngine.git
+    cd HabitApiEngine
+    cp .env.example .env
+    docker compose up --build
+
+```
+API будет доступно:
+```arduino
+http://localhost
+```
+
+Swagger:
+```arduino
+http://localhost/swagger
+```
+
+---
+
+## 🌍 Запуск на сервере (Ubuntu 22.04)
+### 1️⃣ Установка зависимостей
+
+```bash
+    sudo apt update
+    sudo apt install docker.io docker-compose git -y
+    sudo usermod -aG docker $USER
+```
+
+### 2️⃣ Клонирование проекта
+
+```bash
+    sudo mkdir /opt/habit-api
+    sudo chown $USER:$USER /opt/habit-api
+    cd /opt/habit-api
+    git clone git@github.com:cardinal3300/HabitApiEngine.git .
+```
+
+### 3️⃣ ENV
+
+```bash
+    nano .env
+```
+
+### 4️⃣ Запуск
+
+```bash
+    docker compose up -d --build
+```
+---
+
+## 🔁 CI/CD
+
+- При `push` в `вашу_ветку`:
+
+    - запускаются линтеры
+    
+    - тесты
+    
+    - docker build
+    
+    - деплой на сервер через SSH
+
+---
+
+## 🌐 Развёрнутый сервер
+
+```cpp
+http://<IP_СЕРВЕРА>
+```
+
+(укажите реальный адрес перед сдачей)
+
+---
+
+## 🧠 Архитектура деплоя
+
+```marcdown
+    Nginx → Gunicorn → Django
+                 ↘ Celery → Redis
+                 ↘ PostgreSQL
+```
+
+---
+
+## 📘 Документация API
+
+Swagger/Redoc доступен по адресу:
+
+https://localhost/swagger/
+
+https://localhost/redoc/
+
+
+## 💻 CORS
 
 Для взаимодействия SPA-клиента с API настроен CORS.
 
 ---
 
-## 🧑‍💻 Автор
+## 🧑‍ Автор
 
 Backend-разработка: [Жердев Игорь(cardinal3300)] 
 
