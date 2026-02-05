@@ -2,6 +2,7 @@ name: HabitApiEngine
 on: [push]
 env:
   IMAGE_NAME: habitapiengine
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -15,8 +16,8 @@ jobs:
       - run: ruff check .
 
   tests:
-    runs-on: ubuntu-latest
     needs: lint
+    runs-on: ubuntu-latest
     services:
       redis:
         image: redis:7
@@ -62,8 +63,8 @@ jobs:
         run: python manage.py test
 
   build:
-    runs-on: ubuntu-latest
     needs: tests
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -78,8 +79,8 @@ jobs:
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}
 
   deploy:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -98,12 +99,11 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd /opt/habitapiengine
-            IMAGE_TAG=${GITHUB_SHA}
-            docker compose pull
-            docker compose up -d --build
-            docker compose exec -T backend python manage.py migrate --noinput
-            docker compose exec -T backend python manage.py collectstatic --noinput
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'         
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}
+            docker up -d --build
+            docker exec -T backend python manage.py migrate --noinput
+            docker exec -T backend python manage.py collectstatic --noinput
+            docker run -d --name habitapiengine -p 81: 8001 ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}
             docker image prune -f
           EOF
