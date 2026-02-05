@@ -1,8 +1,6 @@
 name: HabitApiEngine
 
-on:
-  push:
-    branches: ["course_work"]
+on: [push]
 
 env:
   IMAGE_NAME: habitapiengine
