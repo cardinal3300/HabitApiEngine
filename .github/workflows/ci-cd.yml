@@ -1,4 +1,5 @@
 name: HabitApiEngine
+
 on: [push]
 env:
   IMAGE_NAME: habitapiengine
@@ -6,6 +7,7 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -16,8 +18,9 @@ jobs:
       - run: ruff check .
 
   tests:
-    needs: lint
     runs-on: ubuntu-latest
+    needs: lint
+
     services:
       redis:
         image: redis:7
@@ -63,8 +66,9 @@ jobs:
         run: python manage.py test
 
   build:
-    needs: tests
     runs-on: ubuntu-latest
+    needs: tests
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -79,8 +83,9 @@ jobs:
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}
 
   deploy:
-    needs: build
     runs-on: ubuntu-latest
+    needs: build
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -90,13 +95,21 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY_HABIT }}
 
+      - name: Upload files to VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY_REST }}
+
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'         
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}
-            docker up -d --build
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'      
+            cd /opt/habitapiengine
+            IMAGE_TAG=${GITHUB_SHA}
+            docker compose --build
+            docker compose up -d
             docker exec -T backend python manage.py migrate --noinput
             docker exec -T backend python manage.py collectstatic --noinput
-            docker run -d --name habitapiengine -p 81: 8001 ${{ secrets.DOCKER_HUB_USERNAME }}/habitapiengine:${{ github.sha }}
             docker image prune -f
           EOF
