@@ -1,5 +1,5 @@
 from datetime import time
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
