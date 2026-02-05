@@ -9,11 +9,15 @@ from paginators import MyPaginator
 
 
 class HabitViewSet(ModelViewSet):
+    queryset = Habit.objects.all()
+
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     pagination_class = MyPaginator
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Habit.objects.none()
         return Habit.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
