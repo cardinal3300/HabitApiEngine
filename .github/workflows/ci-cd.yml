@@ -101,6 +101,16 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY_HABIT }}
+          source: |
+            docker-compose.yml
+            requirements.txt            
+            Dockerfile
+            paginators.py
+            manage.py
+            users
+            nginx
+            habits
+            config
 
       - name: Deploy to server
         run: |
