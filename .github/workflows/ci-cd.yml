@@ -83,7 +83,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_KEY_HABIT }}
 
       - name: Add directory
-        uses: appleboy/ssh-action@master
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_USER }}
