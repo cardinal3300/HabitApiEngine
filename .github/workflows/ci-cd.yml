@@ -100,7 +100,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY_REST }}
+          key: ${{ secrets.SSH_KEY_HABIT }}
 
       - name: Deploy to server
         run: |
